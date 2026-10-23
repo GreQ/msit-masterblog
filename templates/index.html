@@ -11,6 +11,7 @@
             <h1>Welcome to GreQx Blog</h1>
         </header>
         <main>
+            <p class="actions"><a class="button" href="{{ url_for('add') }}">+ Add new post</a></p>
             {% for post in posts %}
                 <article class="post">
                     <h2>{{ post.title }}</h2>

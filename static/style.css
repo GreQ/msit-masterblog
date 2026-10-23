@@ -25,3 +25,10 @@ h1 {
 .post p {
     margin: 10px 0;
 }
+
+.post-form { display: flex; flex-direction: column; gap: 6px; max-width: 600px; }
+.post-form input[type="text"], .post-form textarea {
+    padding: 8px; border: 1px solid #ccc; border-radius: 4px; font: inherit;
+}
+.post-form input[type="submit"] { align-self: flex-start; margin-top: 10px; }
+.error { color: #c0392b; font-weight: bold; }
