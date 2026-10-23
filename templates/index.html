@@ -18,6 +18,7 @@
                     <p>{{ post.content }}</p>
                     <p><em>By {{ post.author }}</em></p>
                     <div class="post-actions">
+                        <a class="button" href="{{ url_for('update', post_id=post['id']) }}">Update</a>
                         <form action="{{ url_for('delete', post_id=post['id']) }}" method="POST"
                             onsubmit="return confirm('Delete this post?');">
                             <button type="submit" class="danger">Delete</button>

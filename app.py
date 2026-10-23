@@ -74,6 +74,27 @@ def add():
         return redirect(url_for("index"))
     return render_template('add.html', post={})
 
+@app.route('/update/<int:post_id>', methods=["GET", "POST"])
+def update(post_id):
+    data = read_data()
+    index = index_of_item_with('id', post_id, data)
+    if not index >=0:
+        return "Not found", 404
+    item = data[index]
+    if request.method == "POST":
+        author = escape(request.form.get("author", "").strip())
+        title = escape(request.form.get("title", "").strip())
+        content = escape(request.form.get("content", "").strip())
+        if not (author and title and content):
+            edited = dict(item, author=author, title=title, content=content)
+            return render_template("update.html", post=edited, error="Please fill in all fields.")
+        item["author"] = author
+        item["title"] = title
+        item["content"] = content
+        save_data(data)
+        return redirect(url_for("index"))
+    return render_template("update.html", post=item)
+
 @app.route('/delete/<int:post_id>', methods=["GET", "POST"])
 def delete(post_id):
     data = read_data()
