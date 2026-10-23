@@ -1,4 +1,4 @@
-from flask import Flask, json, render_template, request, redirect, url_for
+from flask import Flask, json, render_template, request, redirect, url_for, jsonify
 import os
 import json
 from markupsafe import escape
@@ -21,26 +21,28 @@ def save_data(data):
         json.dump(data, file, indent=4, ensure_ascii=False)
     return True
 
-def next_id(posts):
+def next_id(data):
     """Generate a unique id (highest existing id + 1)."""
-    return max((post.get("id", 0) for post in posts), default=0) + 1
+    return max((post.get("id", 0) for post in data), default=0) + 1
 
+#index allowes us data.pop(index) with no iteration O(1)
 def index_of_item_with(key, val, data):
     """Return first data item that has passed key with value"""
+    index = 0
     for item in data:
-        index = 0
-        print(f'{item.get(key)} == {val}')
         if item.get(key) == val:
+            print(f'index_of_item_with: found {key}=={val} at index: {index}')
             return index
         index += 1
     return -1
 
-def data_item_by_id(id, data=None):
-    """Return the post with the given id, or None if it does not exist."""
-    if data is None:
+def fetch_post_by_id(id, data=None):
+    if not data:
         data = read_data()
-    find_data_item('id', id, data)
-    return 
+    index = index_of_item_with('id', id, data)
+    if index >= 0:
+        return data[index]
+    return None
 
 @app.get('/')
 def index():
@@ -62,7 +64,6 @@ def add():
                 'content': content
             })
         data = read_data()
-        #todo: sanitize data / prevent xss
         data.append({
             "id": next_id(data),
             "author": author,
@@ -77,11 +78,15 @@ def add():
 @app.route('/update/<int:post_id>', methods=["GET", "POST"])
 def update(post_id):
     data = read_data()
+    item = fetch_post_by_id(post_id, data)
+    """
     index = index_of_item_with('id', post_id, data)
     if not index >=0:
         return "Not found", 404
     item = data[index]
+    """
     if request.method == "POST":
+        #update item and save save data
         author = escape(request.form.get("author", "").strip())
         title = escape(request.form.get("title", "").strip())
         content = escape(request.form.get("content", "").strip())
@@ -92,7 +97,9 @@ def update(post_id):
         item["title"] = title
         item["content"] = content
         save_data(data)
+        #redirect to listing/index
         return redirect(url_for("index"))
+    #display update page with current item data
     return render_template("update.html", post=item)
 
 @app.route('/delete/<int:post_id>', methods=["GET", "POST"])
@@ -106,6 +113,19 @@ def delete(post_id):
     else:
         print(f'No item found with id {post_id}.')
     return  redirect(url_for("index"))
+
+@app.route("/like/<int:post_id>", methods=["GET", "POST"])
+def like(post_id):
+    print(f'id: {post_id}')
+    data = read_data()
+    item = fetch_post_by_id(post_id, data)
+    print('item ---- '+str(item.get('id')))
+    print(jsonify(item))
+    if item is None:
+        return "Post not found", 404
+    item["likes"] = item.get("likes", 0) + 1
+    save_data(data)
+    return redirect(url_for("index"))
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -18,6 +18,9 @@
                     <p>{{ post.content }}</p>
                     <p><em>By {{ post.author }}</em></p>
                     <div class="post-actions">
+                        <form action="{{ url_for('like', post_id=post['id']) }}" method="POST">
+                            <button type="submit">&#128077; Like ({{ post.get('likes', 0) }})</button>
+                        </form>
                         <a class="button" href="{{ url_for('update', post_id=post['id']) }}">Update</a>
                         <form action="{{ url_for('delete', post_id=post['id']) }}" method="POST"
                             onsubmit="return confirm('Delete this post?');">

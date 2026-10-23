@@ -3,14 +3,15 @@
         "id": 2,
         "author": "Jane Zitrone",
         "title": "Sasasauer",
-        "content": "This is another post."
+        "content": "This is another post.",
+        "likes": 17
     },
     {
         "id": 3,
         "author": "Banane",
-        "title": "Geile Frucht",
+        "title": "Frucht",
         "content": "Ohh bananony rony bony!",
-        "likes": 0
+        "likes": 2
     },
     {
         "id": 4,

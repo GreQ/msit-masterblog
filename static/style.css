@@ -41,3 +41,6 @@ h1 {
 .button:hover, button:hover, input[type="submit"]:hover { background: #3b5f88; }
 button.danger { background: #c0392b; }
 button.danger:hover { background: #962d22; }
+
+.post-actions { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+.post-actions form { margin: 0; }
