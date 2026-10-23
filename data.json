@@ -17,5 +17,12 @@
         "title": "Geile Frucht",
         "content": "Ohh bananony rony bony!",
         "likes": 0
+    },
+    {
+        "id": 4,
+        "author": "&lt;pre&gt;HackAMac123&lt;pre&gt;",
+        "title": "XSS-saved",
+        "content": "&lt;script&gt;document.body.innterHTML = &#39;test 123&#39;; alert(&#39;ok&#39;)&lt;/script&gt;",
+        "likes": 0
     }
 ]
